@@ -75,6 +75,33 @@ body {
 .session-item:hover { background: var(--bg-hover); }
 .session-item.active { background: var(--bg-active); }
 
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 12px 6px;
+}
+
+.history-item {
+  opacity: 0.7;
+}
+
+.history-item:hover {
+  opacity: 1;
+}
+
+.status-icon.history {
+  color: var(--text-muted);
+}
+
+.session-time {
+  font-size: 10px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
 .status-icon {
   width: 20px;
   height: 20px;
@@ -95,6 +122,21 @@ body {
 
 .status-icon.ended {
   color: var(--text-muted);
+}
+
+.status-icon.done {
+  color: #f59e0b;
+  cursor: pointer;
+  animation: pulse-bell 1.5s ease-in-out infinite;
+}
+
+.session-item.has-notification {
+  background: rgba(245, 158, 11, 0.05);
+}
+
+@keyframes pulse-bell {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
 }
 
 .spinner {
@@ -249,13 +291,92 @@ body {
   color: #fff;
 }
 
-/* ── Terminal ── */
-.terminal-container {
+/* ── Toolbar ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  height: 36px;
+  min-height: 36px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  -webkit-app-region: drag;
+}
+
+.toolbar-title {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 6px;
+  -webkit-app-region: no-drag;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.1s;
+}
+
+.toolbar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.toolbar-btn.active {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+/* ── Split panes ── */
+.panes-container {
   flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.panes-container.split-vertical {
+  flex-direction: column;
+}
+
+.pane {
+  flex: 1;
+  min-width: 0;
   min-height: 0;
   position: relative;
 }
 
+.split-horizontal .claude-pane.with-shell {
+  border-right: 1px solid var(--border);
+}
+
+.split-vertical .claude-pane.with-shell {
+  border-bottom: 1px solid var(--border);
+}
+
+.split-horizontal .shell-pane {
+  max-width: 50%;
+}
+
+.split-vertical .shell-pane {
+  max-height: 50%;
+}
+
+/* ── Terminal ── */
 .terminal-wrapper {
   position: absolute;
   inset: 0;
@@ -333,6 +454,20 @@ body {
 
 .mode-card.danger:hover {
   border-color: var(--danger);
+}
+
+.mode-card.shell:hover {
+  border-color: #3b82f6;
+}
+
+.shell-icon {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.session-mode.shell {
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
 }
 
 .mode-icon {
