@@ -4,6 +4,7 @@ use std::collections::HashMap;
 use std::io::{Read as IoRead, Write as IoWrite};
 use std::sync::Mutex;
 use tauri::{AppHandle, Emitter, State};
+use unicode_normalization::UnicodeNormalization;
 use uuid::Uuid;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -81,6 +82,7 @@ fn spawn_claude(
     path: String,
     mode: String,
 ) -> Result<SessionInfo, String> {
+    let path: String = path.nfc().collect();
     let session_id = Uuid::new_v4().to_string();
     let name = path.split('/').filter(|s| !s.is_empty()).last().unwrap_or("session").to_string();
 
@@ -163,6 +165,7 @@ fn spawn_shell(
     data: State<AppData>,
     path: String,
 ) -> Result<SessionInfo, String> {
+    let path: String = path.nfc().collect();
     let session_id = Uuid::new_v4().to_string();
     let name = path.split('/').filter(|s| !s.is_empty()).last().unwrap_or("shell").to_string();
 
@@ -250,7 +253,7 @@ fn pick_folder() -> Option<String> {
         .output()
         .ok()?;
     if output.status.success() {
-        let path = String::from_utf8_lossy(&output.stdout).trim().to_string();
+        let path: String = String::from_utf8_lossy(&output.stdout).trim().nfc().collect();
         if path.is_empty() { None } else { Some(path) }
     } else {
         None
